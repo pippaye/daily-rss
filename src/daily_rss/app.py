@@ -167,10 +167,15 @@ class DailyRSSApp:
                 "Please configure SMTP_* and EMAIL_TO in your .env file."
             )
 
-        # 7. 处理成功，将这些选取的条目标记进 SQLite（标记为程序已读）
-        entries_to_mark = [e for c in category_groups for e in c.selected_entries]
-        self.db.mark_as_processed(entries_to_mark, report_date)
-        logger.info("=== Daily RSS Pipeline completed successfully for %s! ===", report_date)
+        # 7. 处理成功，将本次批次中所有未处理条目标记进 SQLite（标记为程序已读）
+        # 包括因分类配额（Quota）未被精选进 Prompt 的溢出条目，也必须一并标记为已读，
+        # 否则大量旧条目（如每日成百篇的学术论文）会在下一次定时任务中被反复当作“新条目”拉取！
+        self.db.mark_as_processed(unprocessed, report_date)
+        logger.info(
+            "=== Daily RSS Pipeline completed successfully for %s! Marked %d total entries as processed. ===",
+            report_date,
+            len(unprocessed),
+        )
 
     def test_miniflux(self) -> None:
         """测试 Miniflux 连接"""
