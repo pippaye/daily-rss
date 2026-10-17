@@ -1,0 +1,20 @@
+.git
+.venv
+__pycache__
+*.py[oc]
+build/
+dist/
+*.egg-info
+.DS_Store
+
+# 本地数据与报表，通过卷挂载
+data/
+reports/
+*.db
+*.sqlite
+
+# 本地敏感配置，通过 env_file 或 -e 注入
+.env
+
+# 测试代码
+tests/

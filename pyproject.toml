@@ -1,0 +1,22 @@
+[project]
+name = "daily-rss"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "ashenye", email = "luren145@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "croniter>=6.2.4",
+    "httpx>=0.28.1",
+    "markdown>=3.11.1",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+daily-rss = "daily_rss:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17"]
+build-backend = "uv_build"

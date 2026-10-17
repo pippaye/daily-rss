@@ -1,0 +1,24 @@
+services:
+  daily-rss:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: daily-rss
+    restart: unless-stopped
+    # 自动加载当前目录下的 .env 环境变量
+    env_file:
+      - .env
+    # 也可以在此显式覆盖时区等配置
+    environment:
+      - TZ=${TZ:-Asia/Shanghai}
+    volumes:
+      # 持久化已读状态的 SQLite 数据库（容器重建数据不丢失）
+      - ./data:/app/data
+      # 持久化每日生成的 Markdown 归档
+      - ./reports:/app/reports
+    # 日志轮转配置，防止日志无限制增长占用磁盘
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
